@@ -1,0 +1,23 @@
+Short description:
+
+Codes provided are meant to test a basic radio link between two arduino-steered circuits, which (in perspective) are going to be project's on-board physical layer manager and client's ground station.
+
+The circuits' scheme is exact same and trivial. It consists of selected Arduino board (Uno R3 or Nano) and nRf24L01 radio component connected to mentioned bouard via SPI as follows:
+
+nRF24L01 -> Arduino Uno
+===========================
+    VCC  -> 3.3V
+    GND  -> GND
+    CE   -> D7
+    CSN  -> D8
+    MOSI -> D11
+    MISO -> D12
+    SCK  -> D13
+
+and any LED diode attached to D2 to depict circuits proper work (with resistor connected in series ofc)
+
+WARNING: I found it crucial to add some capacitors connected in pararell between VCC and GND of radio module. These were specifically:
+ - 3x ceramic 100 nF (these orange ones :) )
+ - 1x electrolytic 220 uF
+
+When all of above requirements are met, diodes of two circuits should blink synchronously.
