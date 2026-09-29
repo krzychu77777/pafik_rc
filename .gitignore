@@ -69,5 +69,5 @@ Testing/
 .cache/
 
 # Since we switch for Arduino IDE to Platform IO:
-*.vscode/
-*.pio/
+.vscode/
+.pio/
