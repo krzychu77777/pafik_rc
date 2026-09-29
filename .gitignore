@@ -31,7 +31,7 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
+
 *.lib
 
 # Executables
@@ -67,3 +67,7 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Since we switch for Arduino IDE to Platform IO:
+*.vscode/
+*.pio/
