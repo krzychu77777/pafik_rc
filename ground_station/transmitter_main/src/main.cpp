@@ -12,9 +12,6 @@ RF24 radio(7,8);
 const byte address[6] = "00001";
 
 // obsługa eventów
-pinMode(BUTTON_1, INPUT);
-pinMode(BUTTON_2, INPUT);
-
 class CurrentState {
   public:
     int throttle = 0;
@@ -22,39 +19,45 @@ class CurrentState {
     bool lights = 0;
 };
 
-class event {
+class Event {
   private:
-    int buffer_size = 5;
+    static const int buffer_size = 5;
     String event_buffer[buffer_size];
     int it = 0;
+    CurrentState& state;
 
   public:
+    Event(CurrentState& currentState) : state(currentState) {}
+
     bool available() {
-      if (event_buffer[0] == "") {
-        return 0;
-      }
+      return event_buffer[0] != "";
     }
 
     void look_for_event() {
-      if (digitalRead(BUTTON_1) == HIGH && CurrentState.throttle != 1) {
-        CurrentState.throttle = 1;
+      if (digitalRead(BUTTON_1) == HIGH && state.throttle != 1) {
+        state.throttle = 1;
         event_buffer[it] = "FWD";
         it++;
       }
-      else if (digitalRead(BUTTON_2) == HIGH && CurrentState.throttle != -1) {
-        CurrentState.throttle = -1;
+      else if (digitalRead(BUTTON_2) == HIGH && state.throttle != -1) {
+        state.throttle = -1;
         event_buffer[it] = "BWD";
         it++;
       }
-      else if (digitalRead(BUTTON_1) == LOW && digitalRead(BUTTON_2) == LOW && CurrentState.throttle != 0) {
-        CurrentState.throttle = 0;
+      else if (digitalRead(BUTTON_1) == LOW && digitalRead(BUTTON_2) == LOW && state.throttle != 0) {
+        state.throttle = 0;
         event_buffer[it] = "STOP";
         it++;
       }
     }
 };
 
+CurrentState state;
+Event event(state);
+
 void setup() {
+  pinMode(BUTTON_1, INPUT);
+  pinMode(BUTTON_2, INPUT);
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   delay(3000);
@@ -63,19 +66,15 @@ void setup() {
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
   digitalWrite(LED, LOW);
-
-  event Event();
-  CurrentState state();
 }
 
 void loop() {
   delay(100);
 
-
   const char text[32] = "Hello World";
   radio.write(text, sizeof(text));
-  digitalWrite(LED, HIGH);  
-  delay(1000);                     
-  digitalWrite(LED, LOW);   
-  delay(1000); 
+  digitalWrite(LED, HIGH);
+  delay(1000);
+  digitalWrite(LED, LOW);
+  delay(1000);
 }
