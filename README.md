@@ -10,3 +10,6 @@ The general initial assumption is to allow the vehicle to work in two separate m
 
 ## LOGBOOK ##
 *18.08.2026* - official start, estabilishing GitHub repo
+*24.09.2026* - estabilishing basic radio link & pushing some testing code
+*29.09.2026* - switching from Arduino IDE to Platform IO in VS Code, reorganisation
+*05.10.2026* - initial sketch of arbitrage algorithm in ground station steering 
