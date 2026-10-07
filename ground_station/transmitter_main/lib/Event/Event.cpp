@@ -1,37 +1,19 @@
-#include <Arduino.h>
-#include "CurrentState.cpp"
-#define LED 2
-#define BUTTON_1 4
-#define BUTTON_2 5
+#include "Event.h"
 
-class Event {
-  private:
-    static const int buffer_size = 5;
-    String event_buffer[buffer_size];
-    int it = 0;
-    CurrentState& state;
-
-  public:
-    Event(CurrentState& currentState) : state(currentState) {}
-
-    void testing_setter(const String (&new_buffer)[buffer_size])
+void Event::testing_setter(const String (&new_buffer)[buffer_size])
     {
       for (int i = 0; i < buffer_size; i++) {
           event_buffer[i] = new_buffer[i];
       }
     }
 
-    void copy_buffer_to(String (&output)[buffer_size]) {
+    void Event::copy_buffer_to(String (&output)[buffer_size]) {
         for (int i = 0; i < buffer_size; i++) {
           output[i] = event_buffer[i];
       }
     }
 
-    bool available() {
-      return event_buffer[0] != "";
-    }
-
-    void look_for_event() {
+    void Event::look_for_event() {
       // źródło 0: proste przyciski   | ozn: C
       if (digitalRead(BUTTON_1) == HIGH) {
         event_buffer[it] = "CF100";   // C(ustom)+F(orward)+throttle
@@ -61,7 +43,7 @@ class Event {
       it = 0;
     }
 
-    void run_arbitrage() {
+    void Event::run_arbitrage() {
       char leading_throttle_source = 'E'; // E(mpty)
       char leading_light_source = 'E';
 
@@ -115,7 +97,3 @@ class Event {
         }
       }
     }
-
-    void sterring_state_update() {
-    }
-};

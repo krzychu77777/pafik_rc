@@ -1,6 +1,6 @@
-#ifndef PIO_UNIT_TESTING
+#ifndef GROUND_ST_MAIN
 
-#include "Event.cpp"
+#include "Event.h"
 
 #include <nRF24L01.h> // te dwie są do 
 #include <RF24.h>     // obsługi radia
