@@ -2,7 +2,7 @@
 #define PAFIK_EVENT_LIB
 
 #include <Arduino.h>
-#include "CurrentState.h"
+#include "Structs.h"
 #define LED 2
 #define BUTTON_1 4
 #define BUTTON_2 5
@@ -13,9 +13,10 @@ class Event {
     String event_buffer[buffer_size];
     int it = 0;
     CurrentState& state;
+    Buffer& buffer;
 
   public:
-    Event(CurrentState& currentState) : state(currentState) {}
+    Event(CurrentState& currentState, Buffer& raw_buffer) : state(currentState), buffer(raw_buffer) {}
 
     void testing_setter(const String (&new_buffer)[buffer_size]);
 

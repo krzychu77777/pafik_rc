@@ -1,6 +1,7 @@
 #ifndef GROUND_ST_MAIN
 
 #include "Event.h"
+#include "ArduinoInput.h"
 
 #include <nRF24L01.h> // te dwie są do 
 #include <RF24.h>     // obsługi radia
@@ -15,7 +16,9 @@ const byte address[6] = "00001";
 // obsługa eventów
 
 CurrentState state;
-Event event(state);
+Buffer buffer;
+Input input(buffer);
+Event event(state, buffer);
 
 void setup() {
   Serial.begin(9600); 

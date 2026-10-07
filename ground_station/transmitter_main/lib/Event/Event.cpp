@@ -44,9 +44,28 @@ void Event::testing_setter(const String (&new_buffer)[buffer_size])
     }
 
     void Event::run_arbitrage() {
-      char leading_throttle_source = 'E'; // E(mpty)
-      char leading_light_source = 'E';
+      ControlSource leading_throttle_source = Empty; // E(mpty)
+      ControlSource leading_light_source = Empty;
 
+      // ustalanie wiodących źródeł
+      while (! buffer.empty()) {
+        
+        Command command = buffer.pop();
+
+        if (command.source = Empty) { continue; }
+
+        switch (command.type) {
+          case Movement:
+            break;
+          case Lights:
+            break;
+          default:
+            break;
+        }
+      }
+
+
+      /*
       // ustalanie wiodących źródeł
       for(int i=buffer_size-1; i>=0; i--) {
         if (event_buffer[i]=="\0") {continue;}
@@ -95,5 +114,5 @@ void Event::testing_setter(const String (&new_buffer)[buffer_size])
             event_buffer[i]="\0";
           }
         }
-      }
+      } */
     }
