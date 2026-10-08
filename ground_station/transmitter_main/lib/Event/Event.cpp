@@ -1,5 +1,6 @@
 #include "Event.h"
 
+
 void Event::testing_setter(const String (&new_buffer)[buffer_size])
     {
       for (int i = 0; i < buffer_size; i++) {
@@ -60,6 +61,7 @@ void Event::testing_setter(const String (&new_buffer)[buffer_size])
           case Lights:
             break;
           default:
+
             break;
         }
       }

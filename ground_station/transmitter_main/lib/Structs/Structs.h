@@ -7,6 +7,40 @@ enum TaskFamily {Movement, Lights, Other};
 
 enum Task {Forward, Backward, Stop};
 
+enum LogType {
+    INFO,
+    WARNING,
+    ERROR
+};
+
+enum LogCode {
+    buffer_exceeded,
+    arbitrage_error,
+    uknown_command
+};
+
+const char* logTypeToString(LogType level)
+{
+    switch (level)
+    {
+        case LogType::INFO: return "INFO";
+        case LogType::WARNING: return "WARNING";
+        case LogType::ERROR: return "ERROR";
+        default: return "UNKNOWN";
+    }
+}
+
+const char* logCodeToString(LogCode level)
+{
+    switch (level)
+    {
+        case LogCode::buffer_exceeded: return "buffer_exceeded";
+        case LogCode::arbitrage_error: return "arbitrage_error";
+        case LogCode::uknown_command: return "uknown_command";
+        default: return "UNKNOWN";
+    }
+}
+
 struct CurrentState {
   public:
     int throttle = 0;
