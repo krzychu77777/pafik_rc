@@ -1,30 +1,34 @@
-#include <Arduino.h>
 #include <unity.h>
 
-#include "Event.cpp"
+#include "Event.h"
 
 
 void test_example()
 {
+    DefaultLogSink logSink;
+    Logger logger(logSink);
     CurrentState state;
-    Event event(state);
+    Buffer buffer(logger);
+    Event event(state, buffer, logger);
 
-    String input[5] = {"a","b","c","d","e"};
-    event.testing_setter(input);
+    Command cmd1;
+    cmd1.source = Controller;
+    cmd1.type = Movement;
 
-    String output[5];
-    event.copy_buffer_to(output);
+    Command cmd2;
+    cmd2.source = Keyboard;
+    cmd2.type = Movement;
 
-    for (int i = 0; i < 5; i++) {
-        TEST_ASSERT_EQUAL_STRING(input[i].c_str(), output[i].c_str());
-    }
+    buffer.push(cmd1);
+    buffer.push(cmd2);
+
+    TEST_ASSERT_EQUAL(buffer.commands[0].type,Movement);
+    TEST_ASSERT_EQUAL(buffer.commands[1].type,Movement);
 }
 
 
 void setup()
 {
-    delay(2000);
-
     UNITY_BEGIN();
 
     RUN_TEST(test_example);

@@ -13,12 +13,13 @@ int cePin = 7;
 RF24 radio(7,8);
 const byte address[6] = "00001";
 
-// obsługa eventów
-
+// główne instacje klas działających w projekcie
+DefaultLogSink logSink;
+Logger logger(logSink);
 CurrentState state;
-Buffer buffer;
+Buffer buffer(logger);
 Input input(buffer);
-Event event(state, buffer);
+Event event(state, buffer, logger);
 
 void setup() {
   Serial.begin(9600); 

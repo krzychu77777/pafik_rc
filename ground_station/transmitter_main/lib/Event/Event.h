@@ -1,30 +1,21 @@
 #ifndef PAFIK_EVENT_LIB
 #define PAFIK_EVENT_LIB
 
-#include <Arduino.h>
 #include "Structs.h"
-#define LED 2
-#define BUTTON_1 4
-#define BUTTON_2 5
 
 class Event {
   private:
-    static const int buffer_size = 5;
-    String event_buffer[buffer_size];
-    int it = 0;
     CurrentState& state;
     Buffer& buffer;
+    Logger& logger;
+
+    int give_prior(ControlSource& src);;
 
   public:
-    Event(CurrentState& currentState, Buffer& raw_buffer) : state(currentState), buffer(raw_buffer) {}
-
-    void testing_setter(const String (&new_buffer)[buffer_size]);
-
-    void copy_buffer_to(String (&output)[buffer_size]);
-
-    bool available() {return event_buffer[0] != "";}
-
-    void look_for_event();
+    Event(CurrentState& currentState, Buffer& raw_buffer, Logger& logger): 
+      state(currentState), 
+      buffer(raw_buffer), 
+      logger(logger) {}
 
     void run_arbitrage();
 

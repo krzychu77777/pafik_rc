@@ -1,45 +1,13 @@
 #ifndef PAFIK_STRUCTS_LIB
 #define PAFIK_STRUCTS_LIB
 
+#include "Logger.h"
+
 enum ControlSource {Controller, Joystick, Keyboard, Undefined, Empty};
 
 enum TaskFamily {Movement, Lights, Other};
 
 enum Task {Forward, Backward, Stop};
-
-enum LogType {
-    INFO,
-    WARNING,
-    ERROR
-};
-
-enum LogCode {
-    buffer_exceeded,
-    arbitrage_error,
-    uknown_command
-};
-
-const char* logTypeToString(LogType level)
-{
-    switch (level)
-    {
-        case LogType::INFO: return "INFO";
-        case LogType::WARNING: return "WARNING";
-        case LogType::ERROR: return "ERROR";
-        default: return "UNKNOWN";
-    }
-}
-
-const char* logCodeToString(LogCode level)
-{
-    switch (level)
-    {
-        case LogCode::buffer_exceeded: return "buffer_exceeded";
-        case LogCode::arbitrage_error: return "arbitrage_error";
-        case LogCode::uknown_command: return "uknown_command";
-        default: return "UNKNOWN";
-    }
-}
 
 struct CurrentState {
   public:
@@ -56,7 +24,11 @@ struct Command {
 };
 
 class Buffer {
+  private:
+    Logger& logger;
   public:
+    Buffer(Logger& logger) : logger(logger) {}
+
     static constexpr int size = 5;
     Command commands[size];
     int last_id = 0;
@@ -69,19 +41,25 @@ class Buffer {
     }
 
     void push(Command cmd) {
-      if (last_id < size-1) {
+      if (last_id < size) {
         commands[last_id] = cmd;
         last_id++;
       }
       else {
-        // tu trzeba dodać obsługę wyjątków 
+        logger.warning(buffer_exceeded);
       }
     }
 
     Command pop() {
-      Command output = commands[last_id];
-      commands[last_id].source = Empty;
-      return output;
+      if(!empty()) {
+        Command output = commands[last_id];
+        commands[last_id].source = Empty;
+        last_id--;
+        return output;
+      }
+      else {
+        logger.error(buffer_already_empty);
+      }
     }
 };
 

@@ -1,7 +1,7 @@
 #ifndef PAFIK_LOGGER
 #define PAFIK_LOGGER
 
-#include "Structs.h"
+#include "LogTypes.h"
 
 #ifdef ARDUINO
     #include "SerialLogSink.h"
