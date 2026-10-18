@@ -9,7 +9,7 @@ int Event::give_prior(ControlSource& src) {
   if (src==Controller) {
     src_prior = Controller_prior;
   }
-  else if (src = Joystick) {
+  else if (src ==Joystick) {
     src_prior = Joystick_prior;
   }
   else if (src==Keyboard) {
@@ -18,30 +18,37 @@ int Event::give_prior(ControlSource& src) {
   else {
     logger.warning(no_priority_for_this_source);
   }
-  return src;
+  return src_prior;
 }
 
 void Event::run_arbitrage() {
-    ControlSource leading_throttle_source = Empty;
-    ControlSource leading_light_source = Empty;
+    ControlSource leading_throttle_src = Empty;
+    ControlSource leading_steering_src = Empty;
+    ControlSource leading_light_src = Empty;
 
   // ustalanie wiodących źródeł
   for (int i=0; i<buffer.size; i++) {
     
-    #define cmd buffer.commands[i]
+    Command& cmd = buffer.commands[i];
 
     if (cmd.source == Empty) { continue; }
 
     switch (cmd.type) {
-      case Movement:
-        if (give_prior(cmd.source)>give_prior(leading_throttle_source)) {
-          leading_throttle_source = cmd.source;
+      case Throttle:
+        if (give_prior(cmd.source)>give_prior(leading_throttle_src)) {
+          leading_throttle_src = cmd.source;
+        }
+        else cmd.source = Empty;
+        break;
+      case Steering:
+        if (give_prior(cmd.source)>give_prior(leading_steering_src)) {
+          leading_steering_src = cmd.source;
         }
         else cmd.source = Empty;
         break;
       case Lights:
-        if (give_prior(cmd.source)>give_prior(leading_light_source)) {
-            leading_throttle_source = cmd.source;
+        if (give_prior(cmd.source)>give_prior(leading_light_src)) {
+            leading_light_src = cmd.source;
           }
         else cmd.source = Empty;
         break;
@@ -50,56 +57,31 @@ void Event::run_arbitrage() {
         break;
     }
   }
+}
 
+void Event::sterring_state_update() {
+  bool isMoving = false;
 
-  /*
-  // ustalanie wiodących źródeł
-  for(int i=buffer_size-1; i>=0; i--) {
-    if (event_buffer[i]=="\0") {continue;}
+  for (int i=0; i<buffer.size; i++) {
 
-    // przyciski pilota 
-    if (event_buffer[i][0]=='C') { 
-      if (event_buffer[i][1]=='F' || event_buffer[i][1]=='B') {
-        leading_throttle_source = 'C';
+    Command& cmd = buffer.commands[i];
+
+    if (cmd.source != Empty) {
+      if (cmd.type == Throttle) {
+        state.throttle = cmd.value;
+        isMoving = true;
       }
-      else if (event_buffer[i][1]=='L') {
-        leading_light_source = 'C';
+      else if (cmd.type == Steering) {
+        state.steering = cmd.value;
       }
-    }
-    // joystick
-    else if (event_buffer[i][0]=='J') {
-      if (event_buffer[i][1]=='F' || event_buffer[i][1]=='B') {
-        leading_throttle_source = 'J';
-      }
-      else if (event_buffer[i][1]=='L') {
-        leading_light_source = 'J';
+      else if (cmd.type == Lights) {
+        state.lights = !state.lights;
       }
     }
-    // klawiatura
-    else if (event_buffer[i][0]=='K') {
-      if (event_buffer[i][1]=='F' || event_buffer[i][1]=='B') {
-        leading_throttle_source = 'K';
-      }
-      else if (event_buffer[i][1]=='L') {
-        leading_light_source = 'K';
-      }
-    }
-    else {
-      Serial.print("Err: błąd arbitrażu, nie rozpoznano komendy");
-    }
+    buffer.cleanup();
   }
 
-  // usuwanie sprzecznych sterowań
-  for(int i=0; i<buffer_size; i++) {
-    if (event_buffer[i][1]=='B' || event_buffer[i][1]=='F') {
-      if (event_buffer[i][0]!=leading_throttle_source) {
-        event_buffer[i]="\0";
-      }
-    }
-    else if (event_buffer[i][1]=='L') {
-      if (event_buffer[i][0]!=leading_light_source) {
-        event_buffer[i]="\0";
-      }
-    }
-  } */
+  if (! isMoving) {
+    state.throttle = 0;
+  }
 }

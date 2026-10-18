@@ -2,25 +2,30 @@
 #define PAFIK_STRUCTS_LIB
 
 #include "Logger.h"
+#include <stdint.h>
 
 enum ControlSource {Controller, Joystick, Keyboard, Undefined, Empty};
 
-enum TaskFamily {Movement, Lights, Other};
+enum TaskFamily {Throttle, Steering, Lights, Other};
 
-enum Task {Forward, Backward, Stop};
 
 struct CurrentState {
   public:
-    int throttle = 0;
-    int steering = 0;
+    int16_t throttle = 0;
+    int16_t steering = 0;
     bool lights = 0;
 };
 
 struct Command {
   ControlSource source = Empty;
   TaskFamily type = Other;
-  Task task = Stop;
   int value = 0;
+
+  Command(
+    ControlSource source = Empty,
+    TaskFamily type = Other,
+    int value = 0
+  ) : source(source), type(type), value(value) {}
 };
 
 class Buffer {
@@ -34,10 +39,7 @@ class Buffer {
     int last_id = 0;
 
     bool empty() {
-      if (commands[0].source == Empty) {
-        return true;
-      }
-      return false;
+      return last_id==0;
     }
 
     void push(Command cmd) {
@@ -60,6 +62,11 @@ class Buffer {
       else {
         logger.error(buffer_already_empty);
       }
+    }
+
+    void cleanup() {
+      for(int i=0; i<size; i++) {commands[i]=Command{};}
+      last_id=0;
     }
 };
 

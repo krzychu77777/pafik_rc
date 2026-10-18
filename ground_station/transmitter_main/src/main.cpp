@@ -1,7 +1,5 @@
-#ifndef GROUND_ST_MAIN
-
 #include "Event.h"
-#include "ArduinoInput.h"
+#include "ArduinoIO.h"
 
 #include <nRF24L01.h> // te dwie są do 
 #include <RF24.h>     // obsługi radia
@@ -20,6 +18,7 @@ CurrentState state;
 Buffer buffer(logger);
 Input input(buffer);
 Event event(state, buffer, logger);
+RadioSession RfSession(state, radio);
 
 void setup() {
   Serial.begin(9600); 
@@ -45,5 +44,3 @@ void loop() {
   digitalWrite(LED, LOW);
   delay(1000);
 }
-
-#endif
