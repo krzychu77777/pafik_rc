@@ -13,17 +13,17 @@ void test_example()
 
     Command cmd1;
     cmd1.source = Controller;
-    cmd1.type = Movement;
+    cmd1.type = Throttle;
 
     Command cmd2;
     cmd2.source = Keyboard;
-    cmd2.type = Movement;
+    cmd2.type = Throttle;
 
     buffer.push(cmd1);
     buffer.push(cmd2);
 
-    TEST_ASSERT_EQUAL(buffer.commands[0].type,Movement);
-    TEST_ASSERT_EQUAL(buffer.commands[1].type,Movement);
+    TEST_ASSERT_EQUAL(buffer.commands[0].type,Throttle);
+    TEST_ASSERT_EQUAL(buffer.commands[1].type,Throttle);
 }
 
 

@@ -27,20 +27,26 @@ void setup() {
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   delay(3000);
-  radio.begin();
+
+  if (!radio.begin()) {
+    Serial.println("Radio not detected!");
+    while (true) {
+        delay(1000);
+    }
+  }
+  Serial.println("Radio detected");
+
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
   digitalWrite(LED, LOW);
+  Serial.println("Setup done!");
 }
 
 void loop() {
+  input.scan_inputs();
+  //tutaj jest arbitraż
+  event.sterring_state_update();
+  RfSession.send();
   delay(100);
-
-  const char text[32] = "Hello World";
-  radio.write(text, sizeof(text));
-  digitalWrite(LED, HIGH);
-  delay(1000);
-  digitalWrite(LED, LOW);
-  delay(1000);
 }

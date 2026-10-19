@@ -26,6 +26,10 @@ public:
         sink.write(ERROR, code);
     }
 
+    void info (LogCode code) {
+        sink.write(INFO, code);
+    }
+
 };
 
 #endif
