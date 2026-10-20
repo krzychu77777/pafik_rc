@@ -54,8 +54,8 @@ class Buffer {
 
     Command pop() {
       if(!empty()) {
-        Command output = commands[last_id];
-        commands[last_id].source = Empty;
+        Command output = commands[last_id-1];
+        commands[last_id-1].source = Empty;
         last_id--;
         return output;
       }

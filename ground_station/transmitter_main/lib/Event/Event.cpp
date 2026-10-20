@@ -57,6 +57,31 @@ void Event::run_arbitrage() {
         break;
     }
   }
+
+  // usunięcie komend niższego priorytetu
+  for (int i=0; i<buffer.size; i++) {
+
+    Command& cmd = buffer.commands[i];
+    if (cmd.source == Empty) { continue; }
+
+    switch (cmd.type) {
+      case Throttle:
+        if (cmd.source != leading_throttle_src) {
+          cmd.source = Empty; }
+        break;
+      case Steering:
+        if (cmd.source != leading_steering_src) {
+          cmd.source = Empty; }
+        break;
+      case Lights:
+        if (cmd.source != leading_light_src) {
+          cmd.source = Empty; }
+        break;
+      default:
+        logger.error(unknown_command);
+        break;
+    }
+  }
 }
 
 void Event::sterring_state_update() {
@@ -78,9 +103,9 @@ void Event::sterring_state_update() {
         state.lights = !state.lights;
       }
     }
-    buffer.cleanup();
   }
-
+  buffer.cleanup();
+  
   if (! isMoving) {
     state.throttle = 0;
   }
