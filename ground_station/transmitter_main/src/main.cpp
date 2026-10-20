@@ -39,7 +39,7 @@ void setup() {
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
-  radio.enableAckPayload();
+  radio.enableAckPayload();   // włączenie payloadu ACK
   digitalWrite(LED, LOW);
   Serial.println("Setup done!");
   

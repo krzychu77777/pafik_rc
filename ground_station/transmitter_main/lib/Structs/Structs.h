@@ -48,7 +48,7 @@ class Buffer {
         last_id++;
       }
       else {
-        logger.warning(buffer_exceeded);
+        logger.warning(command_buffer_exceeded);
       }
     }
 
