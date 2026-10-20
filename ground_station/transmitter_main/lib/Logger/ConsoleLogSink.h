@@ -14,6 +14,15 @@ public:
                   << logCodeToString(code)
                   << std::endl;
     }
+
+    void backlog(LogType type, LogCode code)
+    {
+        std::cout << "[Pafik] "
+                  << logTypeToString(type)
+                  << " | "
+                  << logCodeToString(code)
+                  << std::endl;
+    }
 };
 
 #endif

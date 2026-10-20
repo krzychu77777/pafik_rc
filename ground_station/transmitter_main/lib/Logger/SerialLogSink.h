@@ -12,6 +12,13 @@ public:
         Serial.print(" | ");
         Serial.println(logCodeToString(code));
     }
+
+    void backlog(LogType type, LogCode code) {
+        Serial.print("[Pafik] ");
+        Serial.print(logTypeToString(type));
+        Serial.print(" | ");
+        Serial.println(logCodeToString(code));
+    }
 };
 
 #endif

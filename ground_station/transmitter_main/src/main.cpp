@@ -39,8 +39,17 @@ void setup() {
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
+  radio.enableAckPayload();
   digitalWrite(LED, LOW);
   Serial.println("Setup done!");
+  
+  bool success = RfSession.ping();
+  if (success && radio.isAckPayloadAvailable()) {
+    BackLog status;
+    radio.read(&status, sizeof(status));
+    logger.car_response(status);
+    Serial.println("Radio connection with Pafik estabilished");
+  }
 }
 
 void loop() {

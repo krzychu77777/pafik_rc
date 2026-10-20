@@ -7,7 +7,7 @@
     #include <nRF24L01.h> 
     #include <RF24.h>    
     #include "Structs.h" 
-    #include "../../Shared/CommProtocol.h"
+    #include "../../../Shared/CommProtocol.h"
     #define LED 2
     #define BUTTON_1 4
     #define BUTTON_2 5
@@ -59,6 +59,12 @@
                 flags
             };
             radio.write(&packet, sizeof(packet));
+        }
+
+        bool ping() {
+            BackLog check {SETUP, pinging};
+            bool success = radio.write(&check, sizeof(check));
+            return success;
         }
     };
 

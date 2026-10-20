@@ -1,7 +1,7 @@
 #ifndef PAFIK_LOGGER
 #define PAFIK_LOGGER
 
-#include "LogTypes.h"
+#include "../../../Shared/CommProtocol.h"
 
 #ifdef ARDUINO
     #include "SerialLogSink.h"
@@ -28,6 +28,10 @@ public:
 
     void info (LogCode code) {
         sink.write(INFO, code);
+    }
+
+    void car_response (BackLog& status) {
+        sink.backlog(status.type, status.code);
     }
 
 };
