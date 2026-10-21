@@ -7,8 +7,7 @@
     #include <nRF24L01.h> 
     #include <RF24.h>    
     #include "Structs.h" 
-    #include "../../../Shared/CommProtocol.h"
-    #define LED 2
+    #include "../../../../shared/CommProtocol.h"
     #define BUTTON_1 4
     #define BUTTON_2 5
 

@@ -1,7 +1,7 @@
 #ifndef PAFIK_LOGGER
 #define PAFIK_LOGGER
 
-#include "../../../Shared/CommProtocol.h"
+#include "../../../../shared/CommProtocol.h"
 
 #ifdef ARDUINO
     #include "SerialLogSink.h"
