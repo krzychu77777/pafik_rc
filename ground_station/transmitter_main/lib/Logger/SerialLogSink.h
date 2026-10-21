@@ -7,14 +7,15 @@
 class SerialLogSink 
 {
 public:
-    void write(LogType type, LogCode code) {
+    void systemLog(LogType type, LogCode code) {
+        Serial.print("[System:] ");
         Serial.print(logTypeToString(type));
         Serial.print(" | ");
         Serial.println(logCodeToString(code));
     }
 
     void backlog(LogType type, LogCode code) {
-        Serial.print("[Pafik] ");
+        Serial.print("[Pafik:]  ");
         Serial.print(logTypeToString(type));
         Serial.print(" | ");
         Serial.println(logCodeToString(code));

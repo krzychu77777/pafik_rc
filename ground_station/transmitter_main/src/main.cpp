@@ -32,6 +32,8 @@ void setup() {
   pinMode(BUTTON_1, INPUT);
   pinMode(BUTTON_2, INPUT);
   pinMode(OK_LED, OUTPUT);
+  pinMode(ERROR_LED, OUTPUT);
+  
   led(OK_LED, on);
   delay(3000);
 

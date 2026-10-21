@@ -26,7 +26,8 @@ Vehicle vehicle;
 logBuff log_buffer;
 Sink receivers(vehicle, log_buffer);
 Logger logger(receivers);
-CommCenter comms(log_buffer, radio, vehicle.radio_pipe);
+ControlInbox inbox;
+CommCenter comms(log_buffer, radio, inbox, vehicle.radio_pipe);
 
 void setup() {
   pinMode(MODE, INPUT);
@@ -56,7 +57,7 @@ void setup() {
 //============================================
   radio.startListening();
   BackLog hello_world {SETUP, OK};  // log wychodzący "status: ok"
-  radio.writeAckPayload(1, &hello_world, sizeof(hello_world));
+  radio.writeAckPayload(vehicle.radio_pipe, &hello_world, sizeof(hello_world));
   
   while(!radio.available()) {
     delay(100);

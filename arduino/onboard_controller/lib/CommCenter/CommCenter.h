@@ -25,23 +25,29 @@ public:
     void update() {
         BackLog pending;
 
-        // RADIO
-        if (log_buffer.pop(pending)) {
-                radio.writeAckPayload(pipe, &pending, sizeof(pending));
+        // LOG ZWROTNY
+        if (log_buffer.peek(pending)) {
+            radio.writeAckPayload(pipe, &pending, sizeof(pending));
+            if (vehicle.mode == AUTO)  {
+                Serial.write(reinterpret_cast<const uint8_t*>(&pending), sizeof(pending));
             }
+            bool log_sent = log_buffer.pop(pending);        // <--- tylko po to żeby skasować log z bufora 
+        }
+
+        // RADIO
         if (radio.available(&pipe)) {
             Packet incoming {0,0,0,0};
             radio.read(&incoming, sizeof(incoming));
             inbox.radio_msg = incoming;
         }
 
-        // UART                                                                             <----- DO POPRAWY
+        // UART
         if (Serial.available() >= sizeof(Packet)) {
             Packet incoming {0,0,0,0};
             Serial.readBytes(reinterpret_cast<char*>(&incoming), sizeof(incoming));
             inbox.uart_msg = incoming;
         }        
-        Serial.write(reinterpret_cast<const uint8_t*>(&pending), sizeof(pending));
+        
     }
 };
 

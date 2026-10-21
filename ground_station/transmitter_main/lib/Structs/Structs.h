@@ -8,7 +8,6 @@ enum ControlSource {Controller, Joystick, Keyboard, Undefined, Empty};
 
 enum TaskFamily {Throttle, Steering, Lights, Other};
 
-
 struct CurrentState {
   public:
     bool override = false;

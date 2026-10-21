@@ -44,7 +44,7 @@
         RadioSession (CurrentState& state, RF24& radio): 
             state(state), radio(radio) {}
 
-        void send() {
+        void update() {
             if (id<UINT16_MAX) {id++;}
             else {id = 0;}
 
@@ -58,7 +58,13 @@
                 state.steering,
                 flags
             };
-            radio.write(&packet, sizeof(packet));
+
+            // wysłanie pakietu i opcjonalny odbiór ack
+            if (radio.write(&packet, sizeof(packet)) && radio.isAckPayloadAvailable()) {
+                BackLog incoming;
+                radio.read(&incoming, sizeof(incoming));
+                logger.car_response(incoming);
+            }
         }
 
         bool ping() {

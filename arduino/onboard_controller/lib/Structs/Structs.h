@@ -36,6 +36,16 @@ public:
         return true;
       }
     }
+
+    bool peek(BackLog& output) {
+      if(empty()) {
+        return false;
+      }
+      else {
+        output = log_queue[head];
+        return true;
+      }
+    }
 };
 
 class PacketManager {

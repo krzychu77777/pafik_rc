@@ -7,9 +7,10 @@
 class ConsoleLogSink
 {
 public:
-    void write(LogType type, LogCode code)
+    void systemLog(LogType type, LogCode code)
     {
-        std::cout << logTypeToString(type)
+        std::cout << "[System:] " 
+                  << logTypeToString(type)
                   << " | "
                   << logCodeToString(code)
                   << std::endl;
@@ -17,7 +18,7 @@ public:
 
     void backlog(LogType type, LogCode code)
     {
-        std::cout << "[Pafik] "
+        std::cout << "[Pafik:]  "
                   << logTypeToString(type)
                   << " | "
                   << logCodeToString(code)

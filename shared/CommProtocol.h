@@ -31,14 +31,23 @@ enum LogType: uint8_t {
 };
 
 enum LogCode: uint8_t {
-    command_buffer_exceeded,
-    log_queue_overflow,
+    // komendy stacji naziemnej 
+    //===========================
+    pinging,            //info
+    radio_detected,
+    connection_with_Pafik_estabilished,
+
+    unknown_command,    // warning
     buffer_already_empty,
     no_priority_for_this_source,
-    log_queue_already_empty,
+    waiting_for_pafik_response,
+
+    command_buffer_exceeded,    //err
+    radio_not_detected,
     arbitrage_error,
-    unknown_command,
-    pinging,
+    
+    // komendy pojazdu
+    //============================
     im_ready,
     OK
 };
@@ -58,6 +67,7 @@ inline const char* logTypeToString(LogType level)
         case LogType::INFO: return "INFO";
         case LogType::WARNING: return "WARNING";
         case LogType::ERROR: return "ERROR";
+        case LogType::SETUP: return "SETUP";
         default: return "UNKNOWN";
     }
 }
@@ -66,14 +76,38 @@ inline const char* logCodeToString(LogCode level)
 {
     switch (level)
     {
-        case LogCode::command_buffer_exceeded: return "command_buffer_exceeded";
-        case LogCode::arbitrage_error: return "arbitrage_error";
-        case LogCode::unknown_command: return "unknown_command";
-        case LogCode::log_queue_overflow: return "log_queue_overflow";
-        case LogCode::log_queue_already_empty: return "log_queue_already_empty";
-        case LogCode::im_ready: return "im_ready";
-        case LogCode::OK: return "OK";
-        default: return "UNKNOWN";
+        // komendy stacji naziemnej
+        case LogCode::pinging:
+            return "pinging";
+        case LogCode::radio_detected:
+            return "radio_detected";
+        case LogCode::connection_with_Pafik_estabilished:
+            return "connection_with_Pafik_estabilished";
+
+        case LogCode::unknown_command:
+            return "unknown_command";
+        case LogCode::buffer_already_empty:
+            return "buffer_already_empty";
+        case LogCode::no_priority_for_this_source:
+            return "no_priority_for_this_source";
+        case LogCode::waiting_for_pafik_response:
+            return "waiting_for_pafik_response";
+
+        case LogCode::command_buffer_exceeded:
+            return "command_buffer_exceeded";
+        case LogCode::radio_not_detected:
+            return "radio_not_detected";
+        case LogCode::arbitrage_error:
+            return "arbitrage_error";
+
+        // komendy pojazdu
+        case LogCode::im_ready:
+            return "im_ready";
+        case LogCode::OK:
+            return "OK";
+
+        default:
+            return "UNKNOWN";
     }
 }
 

@@ -11,6 +11,17 @@
     using DefaultLogSink = ConsoleLogSink;
 #endif
 
+enum Author {System, Pafik};    // to się przyda 
+                                // gdy będziemy wysyłać 
+                                // binarne logi do apki
+                                // 
+struct UserLog {                // wtedy trzeba to      
+    Author author;              // przenieść do kodu
+    LogType type;               // odpowiedniego, nowego
+    LogCode code;               // sinku
+};
+
+
 class Logger {
 private:
     DefaultLogSink& sink;
@@ -19,15 +30,15 @@ public:
     Logger(DefaultLogSink& sink) : sink(sink) {}
 
     void warning(LogCode code) {
-        sink.write(WARNING, code);
+        sink.systemLog(WARNING, code);
     }
 
     void error(LogCode code) {
-        sink.write(ERROR, code);
+        sink.systemLog(ERROR, code);
     }
 
     void info (LogCode code) {
-        sink.write(INFO, code);
+        sink.systemLog(INFO, code);
     }
 
     void car_response (BackLog& status) {
