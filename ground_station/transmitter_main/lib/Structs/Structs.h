@@ -11,6 +11,8 @@ enum TaskFamily {Throttle, Steering, Lights, Other};
 
 struct CurrentState {
   public:
+    bool override = false;
+
     int16_t throttle = 0;
     int16_t steering = 0;
     bool lights = 0;

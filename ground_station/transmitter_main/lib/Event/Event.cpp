@@ -86,27 +86,32 @@ void Event::run_arbitrage() {
 
 void Event::sterring_state_update() {
   bool isMoving = false;
+  bool steering_change = false;
 
   for (int i=0; i<buffer.size; i++) {
 
     Command& cmd = buffer.commands[i];
 
     if (cmd.source != Empty) {
-      if (cmd.type == Throttle) {
+      if (cmd.type == Throttle && cmd.value != state.throttle) {
         state.throttle = cmd.value;
+        steering_change = true;
         isMoving = true;
       }
-      else if (cmd.type == Steering) {
+      else if (cmd.type == Steering && cmd.value != state.steering) {
         state.steering = cmd.value;
+        steering_change = true;
       }
       else if (cmd.type == Lights) {
         state.lights = !state.lights;
+        steering_change = true;
       }
     }
   }
   buffer.cleanup();
   
-  if (! isMoving) {
-    state.throttle = 0;
-  }
+  if (! isMoving) state.throttle = 0;
+
+  if(steering_change) state.override = true;
+  else state.override = false;
 }

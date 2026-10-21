@@ -49,7 +49,8 @@
             else {id = 0;}
 
             uint8_t flags = 0;
-            flags |= state.lights << 0;     // pierwszy z 8 bitów bajtu
+            flags |= state.override << 0;   // pierwszy bit
+            flags |= state.lights << 1;     // drugi z 8 bitów bajtu
 
             Packet packet {
                 id,
