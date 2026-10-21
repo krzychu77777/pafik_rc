@@ -4,7 +4,7 @@
 #include <nRF24L01.h> 
 #include <RF24.h>  
 
-#include "../../../shared/CommProtocol.h"
+#include "../../../../shared/CommProtocol.h"
 #include "Structs.h"
 
 class Sink {

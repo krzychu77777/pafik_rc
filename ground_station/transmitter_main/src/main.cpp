@@ -41,10 +41,10 @@ void setup() {
     Serial.println("Radio not detected!");
     while (true) {
         delay(1000);
+        led(ERROR_LED, blink);
     }
   }
   Serial.println("Radio detected");
-
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();

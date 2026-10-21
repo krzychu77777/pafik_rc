@@ -17,15 +17,7 @@ struct Packet {
         int16_t throttle,
         int16_t steering,
         uint8_t flags
-    ):packet_id(packet_id), throttle(throttle), steering(steering), flags(flags) {}
-};
-
-struct BackLog {
-public: 
-    LogType type;
-    LogCode code;
-
-    //BackLog(LogType type, LogCode code): type(type), code(code) {}
+    ):packet_id(packet_id), throttle(throttle), steering(steering), flags(flags), padding(0) {}
 };
 
 static_assert(sizeof(Packet) == 8,
@@ -49,6 +41,14 @@ enum LogCode: uint8_t {
     pinging,
     im_ready,
     OK
+};
+
+struct BackLog {
+public: 
+    LogType type;
+    LogCode code;
+
+    //BackLog(LogType type, LogCode code): type(type), code(code) {}
 };
 
 inline const char* logTypeToString(LogType level)

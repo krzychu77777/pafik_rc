@@ -7,6 +7,7 @@ public:
     BackLog log_queue[size];
     uint8_t head = 0;
     uint8_t tail = 0;
+    uint16_t dropped_logs = 0;
 
     bool empty() {
         return head==tail;
@@ -14,7 +15,8 @@ public:
 
     void push(BackLog log) {
       if (tail == head-1 || (tail==size-1 && head==0)) {
-        logger.warning(log_queue_overflow);
+        // logger.warning(log_queue_overflow);
+        dropped_logs++;
       }
       else {
         log_queue[tail] = log;
@@ -23,15 +25,15 @@ public:
       }
     }
 
-    BackLog pop() {
+    bool pop(BackLog& output) {
       if(empty()) {
-        //logger.warning(log_queue_already_empty);
+        return false;
       }
       else {
-        BackLog output = log_queue[head];
+        output = log_queue[head];
         if(head<size-1) head++;
         else head=0;
-        return output;
+        return true;
       }
     }
 };
