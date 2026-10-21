@@ -5,7 +5,8 @@
 
     #include <Arduino.h>
     #include <nRF24L01.h> 
-    #include <RF24.h>    
+    #include <RF24.h>  
+    
     #include "Structs.h" 
     #include "../../../../shared/CommProtocol.h"
     #define BUTTON_1 4
@@ -38,11 +39,12 @@
         private:
         CurrentState& state;
         RF24& radio;
+        Logger& logger;
         uint16_t id = 0;
 
         public:
-        RadioSession (CurrentState& state, RF24& radio): 
-            state(state), radio(radio) {}
+        RadioSession (CurrentState& state, RF24& radio, Logger& logger): 
+            state(state), radio(radio), logger(logger) {}
 
         void update() {
             if (id<UINT16_MAX) {id++;}

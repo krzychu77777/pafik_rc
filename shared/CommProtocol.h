@@ -36,6 +36,7 @@ enum LogCode: uint8_t {
     pinging,            //info
     radio_detected,
     connection_with_Pafik_estabilished,
+    setup_done,
 
     unknown_command,    // warning
     buffer_already_empty,
@@ -83,6 +84,8 @@ inline const char* logCodeToString(LogCode level)
             return "radio_detected";
         case LogCode::connection_with_Pafik_estabilished:
             return "connection_with_Pafik_estabilished";
+        case LogCode::setup_done:
+            return "setup_done";
 
         case LogCode::unknown_command:
             return "unknown_command";

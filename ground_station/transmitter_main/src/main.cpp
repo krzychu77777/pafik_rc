@@ -21,11 +21,11 @@ CurrentState state;
 Buffer buffer(logger);
 Input input(buffer);
 Event event(state, buffer, logger);
-RadioSession RfSession(state, radio);
+RadioSession RfSession(state, radio, logger);
 
 // deklaracje przydatnych funkcji z dołu skrytpu
 enum led_command {on, off, blink, fast_blink};
-void led(uint16_t pin, led_command cmd, uint8_t n);
+void led(uint16_t pin, led_command cmd, uint8_t n=1);
 
 void setup() {
   Serial.begin(9600); 
@@ -40,19 +40,19 @@ void setup() {
 //   szukanie własnego radia i konfiguracja
 //============================================
   if (!radio.begin()) {
-    Serial.println("Radio not detected!");
+    logger.warning(radio_not_detected);
     while (true) {
         delay(1000);
         led(ERROR_LED, blink);
     }
   }
-  Serial.println("Radio detected");
+  logger.info(radio_detected);
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
   radio.enableAckPayload();   // włączenie payloadu ACK
   led(OK_LED, off);
-  Serial.println("Setup done!");
+  logger.info(setup_done);
 
 //            ping od pojazdu
 //============================================
@@ -64,12 +64,12 @@ void setup() {
         radio.read(&status, sizeof(status));
         logger.car_response(status);
 
-        Serial.println("Radio connection with Pafik estabilished");
+        logger.info(connection_with_Pafik_estabilished);;
         led(OK_LED, fast_blink, 3);
         connection_estabilished = true;
       }
       else{
-        Serial.println("Waiting for Pafik response");
+        logger.warning(waiting_for_pafik_response);
         led(ERROR_LED, blink);
         delay(4000);
       }
@@ -84,7 +84,7 @@ void loop() {
   delay(100);
 }
 
-void led(uint16_t pin, led_command cmd, uint8_t n=1) {
+void led(uint16_t pin, led_command cmd, uint8_t n) {
   switch (cmd) {
     case on:
       digitalWrite(pin, HIGH);

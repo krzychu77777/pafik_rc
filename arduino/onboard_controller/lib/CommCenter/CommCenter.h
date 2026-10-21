@@ -18,20 +18,23 @@ private:
     RF24& radio;
     ControlInbox& inbox;
     uint8_t &pipe;
+    SteeringMode& mode;
+
 public:
-    CommCenter(logBuff& logs, RF24& radio, ControlInbox& inbox, uint8_t &pipe): 
-    log_buffer(logs), radio(radio), inbox(inbox), pipe(pipe) {}
+    CommCenter(logBuff& logs, RF24& radio, ControlInbox& inbox, Vehicle& vehicle): 
+    log_buffer(logs), radio(radio), inbox(inbox), pipe(vehicle.radio_pipe), mode(vehicle.mode) {}
 
     void update() {
         BackLog pending;
 
         // LOG ZWROTNY
         if (log_buffer.peek(pending)) {
-            radio.writeAckPayload(pipe, &pending, sizeof(pending));
-            if (vehicle.mode == AUTO)  {
-                Serial.write(reinterpret_cast<const uint8_t*>(&pending), sizeof(pending));
+            if (radio.writeAckPayload(pipe, &pending, sizeof(pending))) {
+                if (mode == AUTO)  {
+                    Serial.write(reinterpret_cast<const uint8_t*>(&pending), sizeof(pending));
+                }
+                log_buffer.pop(pending);        // <--- tylko po to żeby skasować log z bufora 
             }
-            bool log_sent = log_buffer.pop(pending);        // <--- tylko po to żeby skasować log z bufora 
         }
 
         // RADIO

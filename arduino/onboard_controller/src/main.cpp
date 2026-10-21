@@ -19,7 +19,7 @@ const byte address[6] = "00001";
 
 // deklaracje przydatnych funkcji z dołu skrytpu
 enum led_command {on, off, blink, fast_blink};
-void led(uint16_t pin, led_command cmd, uint8_t n);
+void led(uint16_t pin, led_command cmd, uint8_t n=1);
 
 // główne instacje klas działających w projekcie
 Vehicle vehicle;
@@ -27,7 +27,7 @@ logBuff log_buffer;
 Sink receivers(vehicle, log_buffer);
 Logger logger(receivers);
 ControlInbox inbox;
-CommCenter comms(log_buffer, radio, inbox, vehicle.radio_pipe);
+CommCenter comms(log_buffer, radio, inbox, vehicle);
 
 void setup() {
   pinMode(MODE, INPUT);
@@ -72,15 +72,16 @@ uint16_t test_iterator = 0;
 
 void loop() {
   comms.update();
-  if (test_iterator % 500) {
+  if (test_iterator % 100 == 0) {
     logger.info(pinging);
   }
   if (test_iterator<UINT16_MAX) test_iterator++;
   else test_iterator = 0;
+  delay(50);
 }
 
 
-void led(uint16_t pin, led_command cmd, uint8_t n=1) {
+void led(uint16_t pin, led_command cmd, uint8_t n) {
   switch (cmd) {
     case on:
       digitalWrite(pin, HIGH);

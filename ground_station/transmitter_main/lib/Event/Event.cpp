@@ -85,7 +85,6 @@ void Event::run_arbitrage() {
 }
 
 void Event::sterring_state_update() {
-  bool isMoving = false;
   bool isSteering = false;
 
   for (int i=0; i<buffer.size; i++) {
