@@ -78,9 +78,9 @@ void setup() {
 
 void loop() {
   input.scan_inputs();
-  //tutaj jest arbitraż
+  event.run_arbitrage();
   event.sterring_state_update();
-  RfSession.send();
+  RfSession.update();
   delay(100);
 }
 

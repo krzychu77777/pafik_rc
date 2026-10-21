@@ -68,8 +68,15 @@ void setup() {
   logger.info(im_ready);
 }
 
+uint16_t test_iterator = 0;
+
 void loop() {
-  // put your main code here, to run repeatedly:
+  comms.update();
+  if (test_iterator % 500) {
+    logger.info(pinging);
+  }
+  if (test_iterator<UINT16_MAX) test_iterator++;
+  else test_iterator = 0;
 }
 
 
